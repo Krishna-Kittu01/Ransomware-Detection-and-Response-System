@@ -1,0 +1,23 @@
+# Folders to monitor
+watch_paths:
+  - data/sandbox
+
+# Database
+database:
+  path: data/rdrs.db
+
+# Logging
+logging:
+  level: INFO
+  directory: logs
+
+# Detection thresholds
+thresholds:
+  entropy: 7.5
+  file_changes: 20
+  rename_count: 10
+
+# Response settings
+response:
+  simulation_mode: true
+  quarantine_dir: data/quarantine
