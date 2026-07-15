@@ -1,0 +1,41 @@
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from app.core.logger import logger
+import time
+
+
+class FileMonitor(FileSystemEventHandler):
+
+    def on_created(self, event):
+        if not event.is_directory:
+            logger.info(f"[CREATED] {event.src_path}")
+
+    def on_modified(self, event):
+        if not event.is_directory:
+            logger.info(f"[MODIFIED] {event.src_path}")
+
+    def on_deleted(self, event):
+        if not event.is_directory:
+            logger.info(f"[DELETED] {event.src_path}")
+
+    def on_moved(self, event):
+        if not event.is_directory:
+            logger.info(f"[RENAMED] {event.src_path} -> {event.dest_path}")
+
+
+def start_monitor(path):
+    observer = Observer()
+    handler = FileMonitor()
+
+    observer.schedule(handler, path, recursive=True)
+    observer.start()
+
+    logger.info(f"Monitoring started on: {path}")
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+
+    observer.join()
