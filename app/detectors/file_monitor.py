@@ -4,6 +4,7 @@ from app.core.logger import logger
 from app.database.database import insert_event
 from app.core.entropy import file_entropy
 from app.core.config import config
+from app.response.alert import ransomware_alert
 import time
 
 
@@ -25,7 +26,7 @@ class FileMonitor(FileSystemEventHandler):
 
                 if entropy > threshold:
                     status = "Suspicious"
-                    logger.warning("🚨 ALERT: Possible ransomware activity detected!")
+                    ransomware_alert(event.src_path, entropy)
                 else:
                     status = "Normal"
 
