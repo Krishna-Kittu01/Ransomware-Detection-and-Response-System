@@ -3,6 +3,7 @@ from watchdog.events import FileSystemEventHandler
 from app.core.logger import logger
 from app.database.database import insert_event
 from app.core.entropy import file_entropy
+from app.core.config import config
 import time
 
 
@@ -20,12 +21,16 @@ class FileMonitor(FileSystemEventHandler):
             try:
                 entropy = file_entropy(event.src_path)
 
-                if entropy > 7.5:
+                threshold = config.get("thresholds")["entropy"]
+
+                if entropy > threshold:
                     status = "Suspicious"
+                    logger.warning("🚨 ALERT: Possible ransomware activity detected!")
                 else:
                     status = "Normal"
 
-            except Exception:
+            except Exception as e:
+                logger.error(f"Error analyzing file: {e}")
                 entropy = 0.0
                 status = "Error"
 
