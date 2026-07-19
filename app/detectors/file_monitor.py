@@ -5,6 +5,7 @@ from app.database.database import insert_event
 from app.core.entropy import file_entropy
 from app.core.config import config
 from app.response.alert import ransomware_alert
+from app.response.quarantine import quarantine_file
 import time
 
 
@@ -26,7 +27,16 @@ class FileMonitor(FileSystemEventHandler):
 
                 if entropy > threshold:
                     status = "Suspicious"
-                    ransomware_alert(event.src_path, entropy)
+
+                    ransomware_alert(
+                        event.src_path,
+                        entropy
+                    )
+
+                    quarantine_file(
+                        event.src_path
+                    )
+
                 else:
                     status = "Normal"
 
@@ -42,7 +52,9 @@ class FileMonitor(FileSystemEventHandler):
                 status
             )
 
-            logger.info(f"Entropy: {entropy:.2f} | Status: {status}")
+            logger.info(
+                f"Entropy: {entropy:.2f} | Status: {status}"
+            )
 
     def on_deleted(self, event):
         if not event.is_directory:
@@ -50,7 +62,9 @@ class FileMonitor(FileSystemEventHandler):
 
     def on_moved(self, event):
         if not event.is_directory:
-            logger.info(f"[RENAMED] {event.src_path} -> {event.dest_path}")
+            logger.info(
+                f"[RENAMED] {event.src_path} -> {event.dest_path}"
+            )
 
 
 def start_monitor(path):
@@ -65,6 +79,7 @@ def start_monitor(path):
     try:
         while True:
             time.sleep(1)
+
     except KeyboardInterrupt:
         observer.stop()
 
