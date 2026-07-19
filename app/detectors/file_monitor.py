@@ -40,8 +40,8 @@ class FileMonitor(FileSystemEventHandler):
                 else:
                     status = "Normal"
 
-            except Exception as e:
-                logger.error(f"Error analyzing file: {e}")
+            except Exception :
+                logger.exception("Error analyzing file")
                 entropy = 0.0
                 status = "Error"
 

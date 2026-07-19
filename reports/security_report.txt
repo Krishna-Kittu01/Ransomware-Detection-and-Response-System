@@ -1,0 +1,21 @@
+
+==================================================
+              RDRS SECURITY REPORT
+==================================================
+
+Total Events      : 93
+Normal Events     : 81
+Suspicious Events : 9
+Error Events      : 2
+
+Average Entropy   : 3.83
+Highest Entropy   : 4.52
+
+Latest Event
+--------------------------------------------------
+File      : data/sandbox\hello2.txt
+Event     : MODIFIED
+Status    : Normal
+Time      : 2026-07-19 15:19:21
+
+==================================================
